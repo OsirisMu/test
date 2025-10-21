@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>损失厌恶营销话术库 - 让每次沟通都更有说服力</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        }
+        .hero-title {
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #1e3a8a, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .dialogue-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .traditional-text {
+            color: #6b7280;
+            position: relative;
+        }
+        .loss-aversion-text {
+            color: #f97316;
+            font-weight: 600;
+            position: relative;
+        }
+        .highlight-bg {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(30, 58, 138, 0.1));
+        }
+        #p5-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .floating-element {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .progress-ring {
+            transform: rotate(-90deg);
+        }
+        .progress-ring-circle {
+            transition: stroke-dasharray 0.35s;
+            transform-origin: 50% 50%;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- P5.js Background -->
+    <div id="p5-background"></div>
+
+    <!-- Navigation -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-orange-500 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">损</span>
+                    </div>
+                    <span class="text-xl font-bold text-gray-900">商呼三部—损失厌恶话术库</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-blue-600 font-medium border-b-2 border-blue-600 pb-1">首页</a>
+                    <a href="dialogue-library.html" class="text-gray-600 hover:text-blue-600 transition-colors">话术库</a>
+                    <a href="practice-system.html" class="text-gray-600 hover:text-blue-600 transition-colors">练习系统</a>
+                    <a href="management.html" class="text-gray-600 hover:text-blue-600 transition-colors">话术管理</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h1 class="hero-title text-5xl md:text-7xl font-bold mb-6 leading-tight">
+                    让每次沟通<br>
+                    <span class="text-blue-900">都更有说服力</span>
+                </h1>
+                <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+                    基于诺贝尔奖心理学理论，将传统销售话术转换为触发客户损失厌恶心理的强效沟通策略。
+                    从"我能给你什么"到"我能帮你避免失去什么"，让成交率提升300%。
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button onclick="startLearning()" class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                        开始学习 →
+                    </button>
+                    <button onclick="showDemo()" class="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg border-2 border-blue-600 hover:bg-blue-50 transition-all duration-300">
+                        查看演示
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20">
+                <div class="text-center floating-element">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">2.25倍</div>
+                    <div class="text-gray-600">损失厌恶心理强度</div>
+                </div>
+                <div class="text-center floating-element" style="animation-delay: 0.5s;">
+                    <div class="text-4xl font-bold text-orange-500 mb-2">300%</div>
+                    <div class="text-gray-600">转化率提升效果</div>
+                </div>
+                <div class="text-center floating-element" style="animation-delay: 1s;">
+                    <div class="text-4xl font-bold text-green-600 mb-2">6大</div>
+                    <div class="text-gray-600">核心应用场景</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Features -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">核心功能模块</h2>
+                <p class="text-xl text-gray-600">完整的损失厌恶营销话术学习与实战系统</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="dialogue-card rounded-2xl p-8 card-hover">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">智能话术生成器</h3>
+                    <p class="text-gray-600 mb-6">输入传统销售话术，AI自动转换为基于损失厌恶心理学的高效沟通版本，实时预测转化效果。</p>
+                    <div class="flex items-center text-blue-600 font-medium">
+                        <span>立即体验</span>
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="dialogue-card rounded-2xl p-8 card-hover">
+                    <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">AI对话练习系统</h3>
+                    <p class="text-gray-600 mb-6">与AI进行角色扮演练习，实时获得专业反馈和评分，快速提升损失厌恶话术运用能力。</p>
+                    <div class="flex items-center text-orange-600 font-medium">
+                        <span>开始练习</span>
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="dialogue-card rounded-2xl p-8 card-hover">
+                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">场景化话术库</h3>
+                    <p class="text-gray-600 mb-6">覆盖6大核心应用场景的完整话术模板，包含心理学原理说明和实战使用指南。</p>
+                    <div class="flex items-center text-green-600 font-medium">
+                        <span>浏览话术</span>
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="dialogue-card rounded-2xl p-8 card-hover">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">学习分析仪表板</h3>
+                    <p class="text-gray-600 mb-6">详细的学习进度追踪，技能掌握度分析，以及个性化的改进建议和实战指导。</p>
+                    <div class="flex items-center text-purple-600 font-medium">
+                        <span>查看分析</span>
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="dialogue-card rounded-2xl p-8 card-hover">
+                    <div class="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">实时效果追踪</h3>
+                    <p class="text-gray-600 mb-6">记录每次练习和实战使用的效果，分析哪些话术最有效，持续优化沟通策略。</p>
+                    <div class="flex items-center text-red-600 font-medium">
+                        <span>查看效果</span>
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="dialogue-card rounded-2xl p-8 card-hover">
+                    <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">团队协作功能</h3>
+                    <p class="text-gray-600 mb-6">团队成员可以共享有效话术，互相学习，共同提升整个团队的销售沟通能力。</p>
+                    <div class="flex items-center text-indigo-600 font-medium">
+                        <span>团队功能</span>
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 to-orange-50">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">实战演示</h2>
+                <p class="text-xl text-gray-600">传统话术 vs 损失厌恶话术效果对比</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Traditional Dialogue -->
+                <div class="dialogue-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gray-400 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold">传</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">传统话术</h3>
+                            <p class="text-gray-600">强调收益和优势</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="traditional-text p-4 bg-gray-50 rounded-lg">
+                            <p class="text-lg">"办理我们的号码认证，您将获得接通率效率提升、企业名称认证，方便快捷办理节省您时间。"</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-gray-400 mb-2">15%</div>
+                            <div class="text-gray-600">预期转化率</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loss Aversion Dialogue -->
+                <div class="dialogue-card rounded-2xl p-8 highlight-bg">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-full flex items-center justify-center mr-4">
+                            <span class="text-white font-bold">损</span>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-900">损失厌恶话术</h3>
+                            <p class="text-gray-600">强调损失和风险</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="loss-aversion-text p-4 bg-white rounded-lg border-l-4 border-orange-500">
+                            <p class="text-lg">"如果不使用我们的号码认证产品，您的号码将会继续被标记成骚扰销售等情况，眼睁睁看着您的同行凭借号码认证的业务优势抢走您的客户。"</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-3xl font-bold text-orange-500 mb-2">45%</div>
+                            <div class="text-gray-600">预期转化率</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-12">
+                <div class="inline-flex items-center bg-white rounded-full px-6 py-3 shadow-lg">
+                    <span class="text-2xl font-bold text-orange-500 mr-2">300%</span>
+                    <span class="text-gray-700">转化率提升效果</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Psychology Principles -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">六大核心技巧</h2>
+                <p class="text-xl text-gray-600">基于心理学原理的完整话术体系</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="dialogue-card rounded-2xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">限时优惠与稀缺性</h3>
+                    <p class="text-gray-600 text-sm">创造时间紧迫感和资源稀缺感，激发客户的FOMO心理</p>
+                </div>
+
+                <div class="dialogue-card rounded-2xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">免费试用与沉没成本</h3>
+                    <p class="text-gray-600 text-sm">让客户投入时间和数据，形成使用习惯和所有权效应</p>
+                </div>
+
+                <div class="dialogue-card rounded-2xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">竞争风险与现状代价</h3>
+                    <p class="text-gray-600 text-sm">揭示维持现状的巨大成本和竞争威胁</p>
+                </div>
+
+                <div class="dialogue-card rounded-2xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">已有之物的失去</h3>
+                    <p class="text-gray-600 text-sm">让客户体验拥有的感觉，再强调失去的风险</p>
+                </div>
+
+                <div class="dialogue-card rounded-2xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">打包服务与失去组件</h3>
+                    <p class="text-gray-600 text-sm">强调整体价值，突出单独购买的高成本</p>
+                </div>
+
+                <div class="dialogue-card rounded-2xl p-6 card-hover">
+                    <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">售后跟进与客户维系</h3>
+                    <p class="text-gray-600 text-sm">主动提醒客户即将失去的价值和服务</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 to-purple-700">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-4xl font-bold text-white mb-6">准备提升您的销售沟通能力吗？</h2>
+            <p class="text-xl text-blue-100 mb-8">立即开始您的损失厌恶话术学习之旅，让每次沟通都更有说服力</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <button onclick="window.location.href='dialogue-library.html'" class="bg-white text-blue-600 px-8 py-4 rounded-xl font-semibold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105">
+                    浏览话术库
+                </button>
+                <button onclick="window.location.href='practice-system.html'" class="bg-orange-500 text-white px-8 py-4 rounded-xl font-semibold text-lg hover:bg-orange-600 transition-all duration-300 transform hover:scale-105">
+                    开始练习
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-orange-500 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">损</span>
+                    </div>
+                    <span class="text-xl font-bold">损失厌恶话术库</span>
+                </div>
+                <p class="text-gray-400 mb-4">心理学理论的营销沟通工具</p>
+                <p class="text-gray-500 text-sm">© 2025 By商呼三部— 让每次沟通都更有说服力.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // P5.js Background Animation
+        function setup() {
+            let canvas = createCanvas(windowWidth, windowHeight);
+            canvas.parent('p5-background');
+            canvas.style('position', 'fixed');
+            canvas.style('top', '0');
+            canvas.style('left', '0');
+            canvas.style('z-index', '-1');
+        }
+
+        function draw() {
+            clear();
+            
+            // Create floating particles
+            for (let i = 0; i < 50; i++) {
+                let x = (noise(i * 0.01, frameCount * 0.005) * width);
+                let y = (noise(i * 0.01 + 100, frameCount * 0.005) * height);
+                let size = noise(i * 0.01 + 200, frameCount * 0.005) * 8 + 2;
+                
+                fill(30, 58, 138, 30);
+                noStroke();
+                circle(x, y, size);
+                
+                fill(249, 115, 22, 20);
+                circle(x + 20, y + 20, size * 0.7);
+            }
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+        }
+
+        // Interactive Functions
+        function startLearning() {
+            anime({
+                targets: '.hero-title',
+                scale: [1, 1.05, 1],
+                duration: 600,
+                easing: 'easeInOutQuad',
+                complete: function() {
+                    window.location.href = 'dialogue-library.html';
+                }
+            });
+        }
+
+        function showDemo() {
+            const demoSection = document.querySelector('.py-20.bg-gradient-to-br.from-blue-50');
+            demoSection.scrollIntoView({ behavior: 'smooth' });
+            
+            anime({
+                targets: '.dialogue-card',
+                scale: [0.9, 1],
+                opacity: [0.7, 1],
+                duration: 800,
+                delay: anime.stagger(200),
+                easing: 'easeOutElastic(1, .8)'
+            });
+        }
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    anime({
+                        targets: entry.target,
+                        translateY: [50, 0],
+                        opacity: [0, 1],
+                        duration: 800,
+                        easing: 'easeOutQuad'
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.card-hover').forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

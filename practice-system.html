@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>练习系统 - 损失厌恶营销话术系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        }
+        .hero-title {
+            font-family: 'Noto Serif SC', serif;
+            background: linear-gradient(135deg, #1e3a8a, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .dialogue-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .chat-container {
+            height: 500px;
+            overflow-y: auto;
+        }
+        .message {
+            animation: fadeInUp 0.5s ease-out;
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .score-ring {
+            transform: rotate(-90deg);
+        }
+        .score-ring-circle {
+            transition: stroke-dasharray 0.35s;
+            transform-origin: 50% 50%;
+        }
+        .typing-indicator {
+            animation: pulse 1.5s infinite;
+        }
+        .practice-mode-active {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: white;
+        }
+        .skill-badge {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(30, 58, 138, 0.1));
+            border: 1px solid rgba(249, 115, 22, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-orange-500 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">损</span>
+                    </div>
+                    <span class="text-xl font-bold text-gray-900">商呼三部—损失厌恶话术库</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-gray-600 hover:text-blue-600 transition-colors">首页</a>
+                    <a href="dialogue-library.html" class="text-gray-600 hover:text-blue-600 transition-colors">话术库</a>
+                    <a href="practice-system.html" class="text-blue-600 font-medium border-b-2 border-blue-600 pb-1">练习系统</a>
+                    <a href="management.html" class="text-gray-600 hover:text-blue-600 transition-colors">话术管理</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="py-16 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="hero-title text-4xl md:text-6xl font-bold mb-6">AI对话练习系统</h1>
+            <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                与AI进行角色扮演练习，实时获得专业反馈和评分，快速提升损失厌恶话术运用能力
+            </p>
+        </div>
+    </section>
+
+    <!-- Practice Modes -->
+    <section class="px-4 sm:px-6 lg:px-8 mb-12">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl font-bold text-gray-900 mb-8 text-center">选择练习模式</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <!-- Mode 1 -->
+                <div class="dialogue-card rounded-2xl p-6 card-hover cursor-pointer" onclick="selectMode('beginner')">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">新手模式</h3>
+                        <p class="text-gray-600 mb-4">从基础话术转换开始，逐步掌握损失厌恶技巧</p>
+                        <div class="text-sm text-green-600 font-medium">推荐初学者</div>
+                    </div>
+                </div>
+
+                <!-- Mode 2 -->
+                <div class="dialogue-card rounded-2xl p-6 card-hover cursor-pointer" onclick="selectMode('intermediate')">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">进阶模式</h3>
+                        <p class="text-gray-600 mb-4">模拟真实销售场景，练习处理各种客户异议</p>
+                        <div class="text-sm text-blue-600 font-medium">有一定基础</div>
+                    </div>
+                </div>
+
+                <!-- Mode 3 -->
+                <div class="dialogue-card rounded-2xl p-6 card-hover cursor-pointer" onclick="selectMode('advanced')">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">专家模式</h3>
+                        <p class="text-gray-600 mb-4">高难度挑战，测试您的损失厌恶话术 mastery</p>
+                        <div class="text-sm text-purple-600 font-medium">专家级用户</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Practice Interface -->
+    <section class="px-4 sm:px-6 lg:px-8 mb-20" id="practice-interface" style="display: none;">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Chat Area -->
+                <div class="lg:col-span-2">
+                    <div class="dialogue-card rounded-2xl p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-2xl font-bold text-gray-900">AI对话练习</h3>
+                            <div class="flex items-center space-x-4">
+                                <div class="text-sm text-gray-600">
+                                    当前场景: <span id="current-scenario" class="font-medium text-blue-600">号码认证</span>
+                                </div>
+                                <button onclick="resetPractice()" class="text-gray-500 hover:text-gray-700">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Chat Messages -->
+                        <div class="chat-container mb-6" id="chat-messages">
+                            <div class="message mb-4">
+                                <div class="flex items-start space-x-3">
+                                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                        <span class="text-white text-sm font-bold">AI</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <div class="bg-gray-100 rounded-lg p-4">
+                                            <p class="text-gray-800">您好，我是某公司的销售负责人。我对您提到的号码认证服务有点兴趣，但说实话，我们现在用的挺好的，为什么要改变呢？</p>
+                                        </div>
+                                        <div class="text-xs text-gray-500 mt-1">AI客户</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Typing Indicator -->
+                        <div id="typing-indicator" class="hidden mb-4">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                                    <span class="text-white text-sm font-bold">AI</span>
+                                </div>
+                                <div class="bg-gray-100 rounded-lg p-3">
+                                    <div class="flex space-x-1">
+                                        <div class="w-2 h-2 bg-gray-400 rounded-full typing-indicator"></div>
+                                        <div class="w-2 h-2 bg-gray-400 rounded-full typing-indicator" style="animation-delay: 0.2s;"></div>
+                                        <div class="w-2 h-2 bg-gray-400 rounded-full typing-indicator" style="animation-delay: 0.4s;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Input Area -->
+                        <div class="flex space-x-4">
+                            <input type="text" id="user-input" placeholder="输入您的回应..." class="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                            <button onclick="sendMessage()" class="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all duration-300">
+                                发送
+                            </button>
+                        </div>
+
+                        <!-- Quick Responses -->
+                        <div class="mt-4">
+                            <div class="text-sm text-gray-600 mb-2">快速回复建议:</div>
+                            <div class="flex flex-wrap gap-2" id="quick-responses">
+                                <button onclick="useQuickResponse(0)" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-200 transition-colors">
+                                    强调竞争威胁
+                                </button>
+                                <button onclick="useQuickResponse(1)" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-200 transition-colors">
+                                    量化损失成本
+                                </button>
+                                <button onclick="useQuickResponse(2)" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-200 transition-colors">
+                                    创造时间压力
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Score Panel -->
+                <div class="space-y-6">
+                    <!-- Real-time Score -->
+                    <div class="dialogue-card rounded-2xl p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">实时评分</h3>
+                        <div class="text-center mb-6">
+                            <div class="relative inline-block">
+                                <svg class="score-ring w-32 h-32" viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="50" stroke="#e5e7eb" stroke-width="8" fill="none"/>
+                                    <circle id="score-circle" cx="60" cy="60" r="50" stroke="#f97316" stroke-width="8" fill="none" 
+                                            stroke-dasharray="0 314" class="score-ring-circle"/>
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <div id="current-score" class="text-3xl font-bold text-orange-500">0</div>
+                                        <div class="text-sm text-gray-600">分</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">损失厌恶运用</span>
+                                <div class="flex space-x-1">
+                                    <div id="la-score-1" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                    <div id="la-score-2" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                    <div id="la-score-3" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                    <div id="la-score-4" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                    <div id="la-score-5" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">语言表达</span>
+                                <div class="flex space-x-1">
+                                    <div id="lang-score-1" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                    <div id="lang-score-2" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                    <div id="lang-score-3" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                    <div id="lang-score-4" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                    <div id="lang-score-5" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-sm text-gray-600">说服力</span>
+                                <div class="flex space-x-1">
+                                    <div id="pers-score-1" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                    <div id="pers-score-2" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                    <div id="pers-score-3" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                    <div id="pers-score-4" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                    <div id="pers-score-5" class="w-3 h-3 bg-gray-300 rounded-full"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Feedback -->
+                    <div class="dialogue-card rounded-2xl p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">实时反馈</h3>
+                        <div id="feedback-content" class="space-y-3">
+                            <div class="bg-blue-50 p-3 rounded-lg">
+                                <div class="text-sm text-blue-800">
+                                    <strong>建议:</strong> 尝试使用更具体的损失数据来增强说服力
+                                </div>
+                            </div>
+                            <div class="bg-green-50 p-3 rounded-lg">
+                                <div class="text-sm text-green-800">
+                                    <strong>优点:</strong> 很好地运用了竞争威胁的心理技巧
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="dialogue-card rounded-2xl p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">练习进度</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                    <span>对话完成度</span>
+                                    <span id="progress-percent">25%</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="progress-bar" class="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full" style="width: 25%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div>
+                                    <div class="text-2xl font-bold text-blue-600" id="total-sessions">12</div>
+                                    <div class="text-sm text-gray-600">总练习次数</div>
+                                </div>
+                                <div>
+                                    <div class="text-2xl font-bold text-green-600" id="avg-score">78</div>
+                                    <div class="text-sm text-gray-600">平均分数</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="flex items-center justify-center space-x-2 mb-4">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-600 to-orange-500 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">损</span>
+                    </div>
+                    <span class="text-xl font-bold">损失厌恶话术库</span>
+                </div>
+                <p class="text-gray-400 mb-4">基于心理学理论的营销沟通工具</p>
+                <p class="text-gray-500 text-sm">© 2025 By商呼三部—让每次沟通都更有说服力.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentMode = '';
+        let conversationStage = 0;
+        let totalScore = 0;
+        let messageCount = 0;
+
+        // Practice scenarios
+        const scenarios = {
+            beginner: {
+                title: "号码认证",
+                customer: "某公司总经理",
+                situation: "客户对现状满意，需要说服其认识到损失风险",
+                stages: [
+                    "您好，我是某公司的销售负责人。我对您提到的号码认证服务有点兴趣，但说实话，我们现在用的挺好的，为什么要改变呢？",
+                    "听起来好像有点道理，但是你们的收费也不便宜啊。我们现在的成本控制的很好，为什么要增加这笔开支？",
+                    "我需要再考虑一下，这不是一个小决定。我们最近预算比较紧张，可能要等到下个季度再说了。",
+                    "好吧，我承认您说得有些道理。但是我还是担心实施起来会很麻烦，影响正常业务。"
+                ]
+            },
+            intermediate: {
+                title: "号码认证",
+                customer: "中小企业老板",
+                situation: "客户对价格敏感，需要量化损失成本",
+                stages: [
+                    "我们是一家小公司，为什么要花钱买你们号码认证？",
+                    "您说的这些功能听起来不错，但是价格超出了我们的预算。能不能便宜点？",
+                    "我需要和团队商量一下。而且我们年底比较忙，可能没有时间做。",
+                    "我担心做了之后没有效果，成本会不会很高？"
+                ]
+            },
+            advanced: {
+                title: "号码认证",
+                customer: "大型企业采购总监",
+                situation: "专业买家，需要高级损失厌恶技巧",
+                stages: [
+                    "我们已经有了类似的解决方案，为什么要换成你们的？切换成本太高了。",
+                    "你们的价格比竞争对手贵30%，我需要看到明显的差异化价值。",
+                    "这个决策需要多个部门协调，流程比较复杂，短期内可能无法决定。",
+                    "我担心做了之后没有效果，白花这个钱。"
+                ]
+            }
+        };
+
+        function selectMode(mode) {
+            currentMode = mode;
+            
+            // Update UI
+            document.querySelectorAll('.dialogue-card').forEach(card => {
+                card.classList.remove('ring-4', 'ring-blue-300');
+            });
+            event.target.closest('.dialogue-card').classList.add('ring-4', 'ring-blue-300');
+            
+            // Show practice interface
+            setTimeout(() => {
+                document.getElementById('practice-interface').style.display = 'block';
+                document.getElementById('practice-interface').scrollIntoView({ behavior: 'smooth' });
+                
+                // Initialize practice
+                initializePractice(mode);
+            }, 500);
+        }
+
+        function initializePractice(mode) {
+            const scenario = scenarios[mode];
+            document.getElementById('current-scenario').textContent = scenario.title;
+            
+            // Reset conversation
+            conversationStage = 0;
+            totalScore = 0;
+            messageCount = 0;
+            
+            // Clear chat
+            document.getElementById('chat-messages').innerHTML = '';
+            
+            // Add first message
+            addAIMessage(scenario.stages[0]);
+            
+            // Update quick responses based on mode
+            updateQuickResponses(mode);
+        }
+
+        function addAIMessage(message) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message mb-4';
+            messageDiv.innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm font-bold">AI</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="bg-gray-100 rounded-lg p-4">
+                            <p class="text-gray-800">${message}</p>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1">AI客户</div>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function addUserMessage(message) {
+            const chatMessages = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message mb-4';
+            messageDiv.innerHTML = `
+                <div class="flex items-start space-x-3 justify-end">
+                    <div class="flex-1">
+                        <div class="bg-blue-100 rounded-lg p-4">
+                            <p class="text-gray-800">${message}</p>
+                        </div>
+                        <div class="text-xs text-gray-500 mt-1 text-right">您</div>
+                    </div>
+                    <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                        <span class="text-white text-sm font-bold">我</span>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addUserMessage(message);
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Analyze message and generate response
+            setTimeout(() => {
+                hideTypingIndicator();
+                analyzeUserMessage(message);
+                generateAIResponse(message);
+            }, 1500);
+        }
+
+        function showTypingIndicator() {
+            document.getElementById('typing-indicator').classList.remove('hidden');
+            document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            document.getElementById('typing-indicator').classList.add('hidden');
+        }
+
+        function analyzeUserMessage(message) {
+            messageCount++;
+            
+            // Calculate score based on loss aversion elements
+            let score = calculateLossAversionScore(message);
+            totalScore += score;
+            
+            // Update score display
+            updateScoreDisplay(score);
+            
+            // Generate feedback
+            generateFeedback(message, score);
+        }
+
+        function calculateLossAversionScore(message) {
+            let score = 0;
+            const lowerMessage = message.toLowerCase();
+            
+            // Check for loss aversion keywords
+            const lossKeywords = ['损失', '失去', '错过', '浪费', '风险', '威胁', '竞争对手', '同行', '涨价', '优惠结束'];
+            const urgencyKeywords = ['限时', '仅剩', '最后', '马上', '立即', '今天', '本周'];
+            const quantificationKeywords = ['元', '万', '%', '倍', '成本', '费用'];
+            
+            // Count keywords
+            lossKeywords.forEach(keyword => {
+                if (lowerMessage.includes(keyword)) score += 10;
+            });
+            
+            urgencyKeywords.forEach(keyword => {
+                if (lowerMessage.includes(keyword)) score += 8;
+            });
+            
+            quantificationKeywords.forEach(keyword => {
+                if (lowerMessage.includes(keyword)) score += 6;
+            });
+            
+            // Bonus for combining techniques
+            if (score > 20) score += 5;
+            
+            return Math.min(score, 100);
+        }
+
+        function updateScoreDisplay(score) {
+            // Update main score
+            document.getElementById('current-score').textContent = score;
+            
+            // Update score ring
+            const circle = document.getElementById('score-circle');
+            const circumference = 2 * Math.PI * 50;
+            const progress = (score / 100) * circumference;
+            circle.style.strokeDasharray = `${progress} ${circumference}`;
+            
+            // Update skill bars
+            updateSkillBars(score);
+        }
+
+        function updateSkillBars(score) {
+            const laScore = Math.min(Math.floor(score / 20) + 1, 5);
+            const langScore = Math.min(Math.floor(score / 25) + 1, 5);
+            const persScore = Math.min(Math.floor(score / 18) + 1, 5);
+            
+            // Update loss aversion bars
+            for (let i = 1; i <= 5; i++) {
+                const bar = document.getElementById(`la-score-${i}`);
+                if (i <= laScore) {
+                    bar.classList.remove('bg-gray-300');
+                    bar.classList.add('bg-orange-500');
+                } else {
+                    bar.classList.add('bg-gray-300');
+                    bar.classList.remove('bg-orange-500');
+                }
+            }
+            
+            // Update language bars
+            for (let i = 1; i <= 5; i++) {
+                const bar = document.getElementById(`lang-score-${i}`);
+                if (i <= langScore) {
+                    bar.classList.remove('bg-gray-300');
+                    bar.classList.add('bg-blue-500');
+                } else {
+                    bar.classList.add('bg-gray-300');
+                    bar.classList.remove('bg-blue-500');
+                }
+            }
+            
+            // Update persuasion bars
+            for (let i = 1; i <= 5; i++) {
+                const bar = document.getElementById(`pers-score-${i}`);
+                if (i <= persScore) {
+                    bar.classList.remove('bg-gray-300');
+                    bar.classList.add('bg-green-500');
+                } else {
+                    bar.classList.add('bg-gray-300');
+                    bar.classList.remove('bg-green-500');
+                }
+            }
+        }
+
+        function generateFeedback(message, score) {
+            const feedbackContent = document.getElementById('feedback-content');
+            feedbackContent.innerHTML = '';
+            
+            if (score >= 80) {
+                feedbackContent.innerHTML = `
+                    <div class="bg-green-50 p-3 rounded-lg">
+                        <div class="text-sm text-green-800">
+                            <strong>优秀!</strong> 您很好地运用了损失厌恶心理技巧，回应具有很强的说服力。
+                        </div>
+                    </div>
+                `;
+            } else if (score >= 60) {
+                feedbackContent.innerHTML = `
+                    <div class="bg-blue-50 p-3 rounded-lg">
+                        <div class="text-sm text-blue-800">
+                            <strong>不错!</strong> 回应中有损失厌恶元素，建议加入更多具体数据增强说服力。
+                        </div>
+                    </div>
+                `;
+            } else {
+                feedbackContent.innerHTML = `
+                    <div class="bg-orange-50 p-3 rounded-lg">
+                        <div class="text-sm text-orange-800">
+                            <strong>建议改进:</strong> 尝试使用"损失"、"错过"、"竞争对手"等关键词来增强损失厌恶效果。
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function generateAIResponse(userMessage) {
+            conversationStage++;
+            const scenario = scenarios[currentMode];
+            
+            if (conversationStage < scenario.stages.length) {
+                setTimeout(() => {
+                    addAIMessage(scenario.stages[conversationStage]);
+                }, 1000);
+            } else {
+                setTimeout(() => {
+                    addAIMessage("您的回应很有说服力！通过这次练习，您已经掌握了损失厌恶话术的核心技巧。继续保持练习，您的销售沟通能力会越来越好。");
+                    completePractice();
+                }, 1000);
+            }
+        }
+
+        function completePractice() {
+            const finalScore = Math.round(totalScore / messageCount);
+            
+            // Update progress
+            document.getElementById('progress-percent').textContent = '100%';
+            document.getElementById('progress-bar').style.width = '100%';
+            
+            // Show completion message
+            const feedbackContent = document.getElementById('feedback-content');
+            feedbackContent.innerHTML = `
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-purple-600 mb-2">练习完成!</div>
+                        <div class="text-purple-800">
+                            <strong>最终得分: ${finalScore}分</strong><br>
+                            您已完成${scenarios[currentMode].title}的模拟练习
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function useQuickResponse(index) {
+            const responses = {
+                beginner: [
+                    "您说得对，现状确实还能维持。但我想提醒您，您的竞争对手已经开始使用号码认证服务了。如果客户同时接到您和竞争对手的电话，看到他们的号码显示企业名称，而您的显示未知号码，您觉得这个客户会选择谁？",
+                    "我理解您的考虑。但是根据我们的数据分析，没有号码认证的企业平均每月损失20%的潜在商机。以您的业务规模，这可能意味着每月损失几万元的收入。现在投资几千元，实际上是在帮您省钱。",
+                    "我完全理解您需要时间考虑。但我想提醒您，我们的优惠政策只持续到本月底。而且，每拖延一天，您都在错失潜在的业务机会。您的竞争对手可不会等您慢慢考虑。"
+                ],
+                intermediate: [
+                    "您说得对，现在确实能基本满足需求。但是您想过没有，一个号码不接可能让您错失多少商机？我们有个客户就是因为这个原因，丢掉了一个50万的大单。现在投资，实际上是在保护您的业务。",
+                    "我理解您对价格的关注。但是您算过没有，您的时间成本是多少？以您现在的规模，每月至少浪费2-3个工作日在这些重复劳动上。这相当于每月损失8000元的人力成本，一年就是近10万元。",
+                    "年底确实很忙，这正说明了您需要更高效的工具。而且，我们的实施团队可以在周末完成切换，完全不影响您的正常业务。错过年底这个销售旺季，损失的可能远不止系统费用。"
+                ],
+                advanced: [
+                    "您说得对，切换成本确实需要考虑。但是您算过维持现状的机会成本吗？根据行业数据，使用我们解决方案的接通率提升40%，这意味着在同样的时间内可以处理更多业务。这个效率差距就是您正在损失的市场机会。",
+                    "价格差异确实存在，但这正体现了价值的差异。我们的系统不仅功能更强大，更重要的是我们提供的是完整的解决方案。您现在节省的30%费用，可能换来的是50%的效率损失，这笔账您算过吗？",
+                    "复杂的决策流程我理解，但市场不会等待。您的竞争对手正在快速部署类似系统，每拖延一天，差距就在拉大。等到您完成所有流程，可能市场份额已经被抢占得差不多了。"
+                ]
+            };
+            
+            const input = document.getElementById('user-input');
+            input.value = responses[currentMode][index];
+            
+            // Auto send after a short delay
+            setTimeout(() => {
+                sendMessage();
+            }, 300);
+        }
+
+        function updateQuickResponses(mode) {
+            const quickResponsesContainer = document.getElementById('quick-responses');
+            const responses = {
+                beginner: ['强调竞争威胁', '量化损失成本', '创造时间压力'],
+                intermediate: ['风险放大', '成本对比', '机会成本'],
+                advanced: ['战略优势', 'ROI分析', '市场风险']
+            };
+            
+            quickResponsesContainer.innerHTML = responses[mode].map((text, index) => 
+                `<button onclick="useQuickResponse(${index})" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-lg text-sm hover:bg-gray-200 transition-colors">${text}</button>`
+            ).join('');
+        }
+
+        function resetPractice() {
+            if (currentMode) {
+                initializePractice(currentMode);
+            }
+        }
+
+        // Enter key support
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    anime({
+                        targets: entry.target,
+                        translateY: [50, 0],
+                        opacity: [0, 1],
+                        duration: 800,
+                        easing: 'easeOutQuad'
+                    });
+                }
+            });
+        }, observerOptions);
+
+        // Observe all cards
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.dialogue-card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>
